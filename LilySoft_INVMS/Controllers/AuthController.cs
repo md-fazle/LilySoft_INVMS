@@ -1,8 +1,11 @@
 ﻿using LilySoft_INVMS.Auth.Models;
 using LilySoft_INVMS.Auth.Services;
 using LilySoft_INVMS.DBContext;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace LilySoft_INVMS.Controllers
 {
@@ -22,21 +25,21 @@ namespace LilySoft_INVMS.Controllers
             return View();
         }
 
-        // GET: Auth/RegisterUser (shows registration form with roles dropdown)
+        // GET: Auth/RegisterUser
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> RegisterUser()
         {
-            // Fix: always populate roles for the dropdown
             ViewBag.RoleList = await _authServices.GetAllRolesAsync();
             return View();
         }
 
-        // POST: Auth/RegisterUser (handles form submission)
+        // POST: Auth/RegisterUser
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(Users users)
         {
-            // Repopulate roles for dropdown if validation fails
             ViewBag.RoleList = await _authServices.GetAllRolesAsync();
 
             if (!ModelState.IsValid)
@@ -54,25 +57,79 @@ namespace LilySoft_INVMS.Controllers
                 return View(users);
             }
 
-            // Ensure password is not null or empty
             if (string.IsNullOrWhiteSpace(users.password))
             {
                 ModelState.AddModelError("password", "Password is required.");
                 return View(users);
             }
 
-            // Insert user via service (service will set isActive=true and hash password)
             await _authServices.InsertUserAsync(users);
 
             return RedirectToAction("Index", "Home");
         }
 
-
-        // GET: Auth/Roles (shows roles list)
+        // GET: Auth/Roles
         public async Task<IActionResult> Roles()
         {
             var roles = await _authServices.GetAllRolesAsync();
             return View(roles);
+        }
+
+        // GET: Auth/Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            return View();
+        }
+
+        // POST: Auth/Login
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // Fetch user from database using AuthServices
+            var user = await _authServices.GetUserByEmailAndPasswordAsync(model.email!, model.password!);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid email or password.");
+                return View(model);
+            }
+
+            // Create claims
+            var claims = new List<Claim>
+             {
+                 new Claim(ClaimTypes.Name, user.email ?? string.Empty),
+                 new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "User")  
+             };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            // Sign in user with cookies
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                          principal,
+                                          new AuthenticationProperties
+                                          {
+                                              IsPersistent = model.RememberMe
+                                          });
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // POST: Auth/Logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
     }
 }

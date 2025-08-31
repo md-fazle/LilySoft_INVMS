@@ -1,9 +1,7 @@
 ﻿using LilySoft_INVMS.Auth.Models;
 using LilySoft_INVMS.DBContext;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace LilySoft_INVMS.Auth.Services
 {
@@ -15,6 +13,7 @@ namespace LilySoft_INVMS.Auth.Services
         {
             _context = context;
         }
+
         // Get all roles
         public async Task<List<Roles>> GetAllRolesAsync()
         {
@@ -42,13 +41,38 @@ namespace LilySoft_INVMS.Auth.Services
             await _context.SaveChangesAsync();
         }
 
-
         // Optional: Fetch all users
         public async Task<List<Users>> GetAllUsersAsync()
         {
             return await _context.Users.Include(u => u.Role).ToListAsync();
         }
 
+        // NEW: Get user by email and password
+        public async Task<Users?> GetUserByEmailAndPasswordAsync(string email, string password)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                return null;
 
+            // Find user by email and active status
+            var user = await _context.Users
+                                     .Include(u => u.Role)
+                                     .FirstOrDefaultAsync(u => u.email == email && u.isActive);
+
+            if (user == null)
+                return null;
+
+            // Verify password using the same PasswordHasher
+            // NEW: Add null check for user.password before calling VerifyHashedPassword
+            var passwordHasher = new PasswordHasher<Users>();
+            if (string.IsNullOrEmpty(user.password))
+                return null;
+
+            var result = passwordHasher.VerifyHashedPassword(user, user.password, password);
+
+            if (result == PasswordVerificationResult.Success)
+                return user;
+
+            return null;
+        }
     }
 }

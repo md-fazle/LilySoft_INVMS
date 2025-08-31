@@ -1,5 +1,6 @@
 using LilySoft_INVMS.Auth.Services;
 using LilySoft_INVMS.DBContext;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -19,6 +20,16 @@ builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(con
 
 // ?  AuthServices
 builder.Services.AddScoped<AuthServices>();
+
+// Add cookie authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";           // Redirect to login if unauthorized
+        options.AccessDeniedPath = "/Auth/AccessDenied"; // Optional: access denied page
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.SlidingExpiration = true;
+    });
 
 var app = builder.Build();
 
