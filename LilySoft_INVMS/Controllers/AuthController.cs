@@ -26,7 +26,7 @@ namespace LilySoft_INVMS.Controllers
         }
 
         // GET: Auth/RegisterUser
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "ManageUsers")] // Permission-based authorization
         [HttpGet]
         public async Task<IActionResult> RegisterUser()
         {
@@ -35,7 +35,7 @@ namespace LilySoft_INVMS.Controllers
         }
 
         // POST: Auth/RegisterUser
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "ManageUsers")] // Permission-based authorization
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(Users users)
@@ -69,6 +69,7 @@ namespace LilySoft_INVMS.Controllers
         }
 
         // GET: Auth/Roles
+        [Authorize(Policy = "ManageRoles")] // Only users with ManageRoles permission
         public async Task<IActionResult> Roles()
         {
             var roles = await _authServices.GetAllRolesAsync();
@@ -93,7 +94,7 @@ namespace LilySoft_INVMS.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Fetch user from database using AuthServices
+            // Fetch user with RolePermissions and Permissions included
             var user = await _authServices.GetUserByEmailAndPasswordAsync(model.email!, model.password!);
 
             if (user == null)
@@ -104,10 +105,18 @@ namespace LilySoft_INVMS.Controllers
 
             // Create claims
             var claims = new List<Claim>
-             {
-                 new Claim(ClaimTypes.Name, user.email ?? string.Empty),
-                 new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "User")  
-             };
+            {
+                new Claim(ClaimTypes.Name, user.email ?? string.Empty),
+                new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "User")
+            };
+
+            // Add permission claims dynamically
+            if (user.Role?.RolePermissions != null)
+            {
+                var permissionClaims = user.Role.RolePermissions
+                    .Select(rp => new Claim("Permission", rp.Permission?.PermissionName ?? string.Empty));
+                claims.AddRange(permissionClaims);
+            }
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
@@ -130,6 +139,13 @@ namespace LilySoft_INVMS.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
+        }
+
+        // GET: Auth/AccessDenied
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View(); // Create a simple AccessDenied.cshtml view
         }
     }
 }
