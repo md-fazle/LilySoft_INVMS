@@ -14,6 +14,8 @@ namespace LilySoft_INVMS.DBContext
         public DbSet<Auth.Models.Permission> Permissions { get; set; }
         public DbSet<Auth.Models.RolePermission> RolePermissions { get; set; }
 
+        public DbSet<Auth.Models.Users> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

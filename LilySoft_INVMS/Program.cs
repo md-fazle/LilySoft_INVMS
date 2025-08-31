@@ -1,3 +1,4 @@
+using LilySoft_INVMS.Auth.Services;
 using LilySoft_INVMS.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,9 @@ var connectionString = configuration.GetConnectionString("DefaultConnection")
 //Add AuthDbContext
 builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
 
+// ?  AuthServices
+builder.Services.AddScoped<AuthServices>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,7 +34,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
