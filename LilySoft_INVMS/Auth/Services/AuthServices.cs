@@ -41,38 +41,37 @@ namespace LilySoft_INVMS.Auth.Services
             await _context.SaveChangesAsync();
         }
 
-        // Optional: Fetch all users
+        // Fetch all users including roles and permissions
         public async Task<List<Users>> GetAllUsersAsync()
         {
-            return await _context.Users.Include(u => u.Role).ToListAsync();
+            return await _context.Users
+                                 .Include(u => u.Role)
+                                 .ThenInclude(r => r.RolePermissions)
+                                 .ThenInclude(rp => rp.Permission)
+                                 .ToListAsync();
         }
 
-        // NEW: Get user by email and password
+        // Get user by email and password, including RolePermissions for claims
         public async Task<Users?> GetUserByEmailAndPasswordAsync(string email, string password)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
                 return null;
 
-            // Find user by email and active status
+            // Include Role -> RolePermissions -> Permission
             var user = await _context.Users
                                      .Include(u => u.Role)
+                                     .ThenInclude(r => r.RolePermissions!)
+                                     .ThenInclude(rp => rp.Permission)
                                      .FirstOrDefaultAsync(u => u.email == email && u.isActive);
 
-            if (user == null)
+            if (user == null || string.IsNullOrEmpty(user.password))
                 return null;
 
-            // Verify password using the same PasswordHasher
-            // NEW: Add null check for user.password before calling VerifyHashedPassword
+            // Verify hashed password
             var passwordHasher = new PasswordHasher<Users>();
-            if (string.IsNullOrEmpty(user.password))
-                return null;
-
             var result = passwordHasher.VerifyHashedPassword(user, user.password, password);
 
-            if (result == PasswordVerificationResult.Success)
-                return user;
-
-            return null;
+            return result == PasswordVerificationResult.Success ? user : null;
         }
     }
 }

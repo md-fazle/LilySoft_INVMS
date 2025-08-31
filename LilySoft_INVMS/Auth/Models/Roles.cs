@@ -15,6 +15,6 @@ namespace LilySoft_INVMS.Auth.Models
 
         // Navigation
         public virtual ICollection<Users>? Users { get; set; }
-        public virtual ICollection<RolePermission>? RolePermissions { get; set; }
+        public virtual ICollection<RolePermission>? RolePermissions { get; set; } 
     }
 }
