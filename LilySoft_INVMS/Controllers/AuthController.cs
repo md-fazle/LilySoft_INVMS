@@ -22,46 +22,53 @@ namespace LilySoft_INVMS.Controllers
             return View();
         }
 
-        // ✅ GET: Auth/RegisterUser (shows registration form with roles dropdown)
+        // GET: Auth/RegisterUser (shows registration form with roles dropdown)
         [HttpGet]
         public async Task<IActionResult> RegisterUser()
         {
-            var roles = await _authServices.GetAllRolesAsync();
-            ViewBag.RoleList = roles; // pass roles to the view
-
+            // Fix: always populate roles for the dropdown
+            ViewBag.RoleList = await _authServices.GetAllRolesAsync();
             return View();
         }
 
-        // ✅ POST: Auth/RegisterUser (handles form submission)
+        // POST: Auth/RegisterUser (handles form submission)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(Users users)
         {
-            var roles = await _authServices.GetAllRolesAsync();
-            ViewBag.RoleList = roles; // needed to repopulate dropdown if validation fails
+            // Repopulate roles for dropdown if validation fails
+            ViewBag.RoleList = await _authServices.GetAllRolesAsync();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(users);
+
+            if (string.IsNullOrWhiteSpace(users.email))
             {
-                if (string.IsNullOrWhiteSpace(users.email))
-                {
-                    ModelState.AddModelError("email", "Email is required.");
-                    return View(users); // stay on registration page
-                }
-
-                if (await _authServices.EmailExistsAsync(users.email))
-                {
-                    ModelState.AddModelError("email", "Email already exists.");
-                    return View(users); // stay on registration page
-                }
-
-                await _authServices.InsertUserAsync(users);
-                return RedirectToAction("Index", "Home");
+                ModelState.AddModelError("email", "Email is required.");
+                return View(users);
             }
 
-            return View(users); // return view with validation errors
+            if (await _authServices.EmailExistsAsync(users.email))
+            {
+                ModelState.AddModelError("email", "Email already exists.");
+                return View(users);
+            }
+
+            // Ensure password is not null or empty
+            if (string.IsNullOrWhiteSpace(users.password))
+            {
+                ModelState.AddModelError("password", "Password is required.");
+                return View(users);
+            }
+
+            // Insert user via service (service will set isActive=true and hash password)
+            await _authServices.InsertUserAsync(users);
+
+            return RedirectToAction("Index", "Home");
         }
 
-        // ✅ GET: Auth/Roles (shows roles list)
+
+        // GET: Auth/Roles (shows roles list)
         public async Task<IActionResult> Roles()
         {
             var roles = await _authServices.GetAllRolesAsync();
