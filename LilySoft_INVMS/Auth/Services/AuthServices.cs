@@ -1,5 +1,6 @@
 ﻿using LilySoft_INVMS.Auth.Models;
 using LilySoft_INVMS.DBContext;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
@@ -30,6 +31,13 @@ namespace LilySoft_INVMS.Auth.Services
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+        }
+
+        // Get All Roles
+        
+        public async Task<List<Roles>> GetAllRolesAsync()
+        {
+            return await _context.Roles.ToListAsync();
         }
     }
 }
