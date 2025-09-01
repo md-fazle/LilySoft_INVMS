@@ -1,6 +1,5 @@
 ﻿using LilySoft_INVMS.Auth.Models;
 using LilySoft_INVMS.Auth.Services;
-using LilySoft_INVMS.DBContext;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -9,24 +8,24 @@ using System.Security.Claims;
 
 namespace LilySoft_INVMS.Controllers
 {
+    [Authorize(Roles = "Admin,Manager,Staff,Viewer")]
     public class AuthController : Controller
     {
         private readonly AuthServices _authServices;
-        private readonly AuthDbContext _context;
 
-        public AuthController(AuthServices authServices, AuthDbContext authDbContext)
+        public AuthController(AuthServices authServices)
         {
             _authServices = authServices;
-            _context = authDbContext;
         }
 
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity?.IsAuthenticated == true)
+                return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Login");
         }
 
-        // GET: Auth/RegisterUser
-        [Authorize(Policy = "ManageUsers")] // Permission-based authorization
         [HttpGet]
         public async Task<IActionResult> RegisterUser()
         {
@@ -34,67 +33,57 @@ namespace LilySoft_INVMS.Controllers
             return View();
         }
 
-        // POST: Auth/RegisterUser
-        [Authorize(Policy = "ManageUsers")] // Permission-based authorization
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterUser(Users users)
+        public async Task<IActionResult> RegisterUser(Users user)
         {
             ViewBag.RoleList = await _authServices.GetAllRolesAsync();
 
-            if (!ModelState.IsValid)
-                return View(users);
-
-            if (string.IsNullOrWhiteSpace(users.email))
+            if (!ModelState.IsValid) return View(user);
+            if (string.IsNullOrWhiteSpace(user.email))
             {
                 ModelState.AddModelError("email", "Email is required.");
-                return View(users);
+                return View(user);
             }
-
-            if (await _authServices.EmailExistsAsync(users.email))
+            if (await _authServices.EmailExistsAsync(user.email))
             {
                 ModelState.AddModelError("email", "Email already exists.");
-                return View(users);
+                return View(user);
             }
-
-            if (string.IsNullOrWhiteSpace(users.password))
+            if (string.IsNullOrWhiteSpace(user.password))
             {
                 ModelState.AddModelError("password", "Password is required.");
-                return View(users);
+                return View(user);
             }
 
-            await _authServices.InsertUserAsync(users);
-
+            await _authServices.InsertUserAsync(user);
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: Auth/Roles
-        [Authorize(Policy = "ManageRoles")] // Only users with ManageRoles permission
         public async Task<IActionResult> Roles()
         {
             var roles = await _authServices.GetAllRolesAsync();
             return View(roles);
         }
 
-        // GET: Auth/Login
         [HttpGet]
-        public IActionResult Login()
+        [AllowAnonymous]
+        public IActionResult Login(string? returnUrl = null)
         {
-            if (User.Identity != null && User.Identity.IsAuthenticated)
+            if (User.Identity?.IsAuthenticated == true)
                 return RedirectToAction("Index", "Home");
 
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
-        // POST: Auth/Login
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            if (!ModelState.IsValid) return View(model);
 
-            // Fetch user with RolePermissions and Permissions included
             var user = await _authServices.GetUserByEmailAndPasswordAsync(model.email!, model.password!);
 
             if (user == null)
@@ -103,36 +92,38 @@ namespace LilySoft_INVMS.Controllers
                 return View(model);
             }
 
-            // Create claims
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.email ?? string.Empty),
-                new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "User")
+                new Claim(ClaimTypes.Name, user.userName ?? user.email ?? string.Empty),
+                new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "User"),
+                new Claim("UserId", user.userId.ToString())
             };
 
-            // Add permission claims dynamically
             if (user.Role?.RolePermissions != null)
             {
-                var permissionClaims = user.Role.RolePermissions
-                    .Select(rp => new Claim("Permission", rp.Permission?.PermissionName ?? string.Empty));
-                claims.AddRange(permissionClaims);
+                foreach (var rp in user.Role.RolePermissions.Where(rp => rp.Permission != null))
+                {
+                    claims.Add(new Claim("Permission", rp.Permission!.PermissionName!));
+                }
             }
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            // Sign in user with cookies
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                           principal,
                                           new AuthenticationProperties
                                           {
-                                              IsPersistent = model.RememberMe
+                                              IsPersistent = model.RememberMe,
+                                              ExpiresUtc = DateTime.UtcNow.AddHours(1)
                                           });
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: Auth/Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
@@ -141,11 +132,7 @@ namespace LilySoft_INVMS.Controllers
             return RedirectToAction("Login");
         }
 
-        // GET: Auth/AccessDenied
         [HttpGet]
-        public IActionResult AccessDenied()
-        {
-            return View(); // Create a simple AccessDenied.cshtml view
-        }
+        public IActionResult AccessDenied() => View();
     }
 }
