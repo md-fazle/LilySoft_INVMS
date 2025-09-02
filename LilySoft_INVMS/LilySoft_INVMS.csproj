@@ -10,7 +10,6 @@
     <Folder Include="Auth\Models\" />
     <Folder Include="Migrations\" />
     <Folder Include="Services\" />
-    <Folder Include="Views\Auth\" />
   </ItemGroup>
 
   <ItemGroup>
