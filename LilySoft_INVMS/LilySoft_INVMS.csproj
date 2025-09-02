@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Auth\Models\" />
-    <Folder Include="Auth\Services\" />
     <Folder Include="Migrations\" />
     <Folder Include="Services\" />
     <Folder Include="Views\Auth\" />
