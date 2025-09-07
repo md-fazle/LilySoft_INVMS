@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using LilySoft_INVMS.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LilySoft_INVMS.Controllers
@@ -17,11 +18,13 @@ namespace LilySoft_INVMS.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
         }
+       
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
