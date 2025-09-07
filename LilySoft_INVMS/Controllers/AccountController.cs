@@ -102,8 +102,85 @@ namespace LilySoft_INVMS.Controllers
             return View(model);
         }
 
-       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();  
+            return RedirectToAction("Login", "Account");  
+        }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult VerifyEmail()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyEmail(VerifyEmailVewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await userManager.FindByEmailAsync(model.Email!);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Email not found");
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("ChangePassword", "Account", new { email = model.Email });
+                //var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                //TempData["SuccessMessage"] = "Verification link has been sent to your email.";
+                //return RedirectToAction("VerifyEmail");
+            }
+
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ChangePassword(string email)
+        {
+            var model = new ChangePasswordViewModel { Email = email };
+            return View(model);
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(" ", "Something want wrong");
+                return View(model);
+            }
+            var user = await userManager.FindByEmailAsync(model.Email!);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Email not found");
+                return View(model);
+            }
+            var result = await userManager.RemovePasswordAsync(user);
+
+            if (result.Succeeded)
+            {
+                result = await userManager.AddPasswordAsync(user, model.NewPassword!);
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError(" ", error.Description);
+                }
+                return View(model);
+            }
+             
+        }
     }
 }
