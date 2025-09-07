@@ -1,5 +1,6 @@
 ﻿using LilySoft_INVMS.Auth.Models;
 using LilySoft_INVMS.Auth.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,8 +39,8 @@ namespace LilySoft_INVMS.Controllers
             }
 
             var result = await signInManager.PasswordSignInAsync(
-                model.Email!,         // null-forgiving since [Required]
-                model.password!,      // same here
+                model.Email!,        
+                model.password!,     
                 model.rememberMe,
                 lockoutOnFailure: false);
 
@@ -60,6 +61,7 @@ namespace LilySoft_INVMS.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegistrationViewModels model)
         {
@@ -70,24 +72,25 @@ namespace LilySoft_INVMS.Controllers
 
             var user = new Users
             {
+                FullName = model.Name!,
                 UserName = model.Email!,
                 Email = model.Email!,
-                FullName = model.Name!
+                EmailConfirmed = true // ✅ optional: skip confirmation
             };
 
             var result = await userManager.CreateAsync(user, model.Password!);
 
             if (result.Succeeded)
             {
-                var roleExists = await roleManager.RoleExistsAsync("Viewer");
-                if (!roleExists)
+                if (!await roleManager.RoleExistsAsync("User"))
                 {
-                    await roleManager.CreateAsync(new IdentityRole("Viewer"));
+                    await roleManager.CreateAsync(new IdentityRole("User"));
                 }
 
-                await userManager.AddToRoleAsync(user, "Viewer");
-                await signInManager.SignInAsync(user, isPersistent: false);
+                await userManager.AddToRoleAsync(user, "User");
 
+                // ✅ Do not auto-login, force them to login manually
+                TempData["SuccessMessage"] = "Registration successful. Please log in.";
                 return RedirectToAction("Login", "Account");
             }
 
@@ -98,5 +101,9 @@ namespace LilySoft_INVMS.Controllers
 
             return View(model);
         }
+
+       
+
+
     }
 }

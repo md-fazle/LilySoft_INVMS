@@ -1,5 +1,5 @@
 ﻿@using LilySoft_INVMS.Auth.ViewModels;
-@model RegistrationViewModels;
+@model RegistrationViewModels
 
 @{
     ViewData["Title"] = "Register";
@@ -11,6 +11,8 @@
         <h2 class="text-center mb-4">Register</h2>
         <form asp-action="Register" method="post">
             @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(false, "", new { @class = "text-danger mb-3" })
 
             <div class="mb-3">
                 <label asp-for="Name" class="form-label"></label>
