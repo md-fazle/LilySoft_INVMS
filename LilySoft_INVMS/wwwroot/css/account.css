@@ -1,32 +1,48 @@
+/* ===== Root Variables ===== */
+:root {
+    --primary-color: #4facfe;
+    --secondary-color: #00f2fe;
+    --text-dark: #333;
+    --text-light: #444;
+    --border-color: #ccc;
+    --radius: 12px;
+    --transition: 0.3s ease;
+}
+
+/* ===== Base Reset ===== */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-/* ===== Reset & Base ===== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     margin: 0;
     padding: 0;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* ===== Accessibility Focus States ===== */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem var(--primary-color);
 }
 
 /* ===== Container ===== */
@@ -35,24 +51,26 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 15px;
+    padding: 20px;
 }
 
 /* ===== Card ===== */
 .account-box {
     background: #fff;
-    border-radius: 16px;
+    border-radius: var(--radius);
     padding: 40px 30px;
-    max-width: 400px;
+    max-width: 500px;
     width: 100%;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.6s ease-in-out;
+    animation: fadeIn 0.6s var(--transition);
+    text-align: left;
 }
 
-    /* ===== Heading ===== */
     .account-box h2 {
         font-weight: 700;
-        color: #333;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        text-align: center;
     }
 
 /* ===== Form Inputs ===== */
@@ -60,18 +78,19 @@ body {
     font-weight: 600;
     margin-bottom: 6px;
     display: block;
-    color: #444;
+    color: var(--text-light);
 }
 
 .form-control {
-    border-radius: 8px;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    transition: border 0.3s, box-shadow 0.3s;
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    border: 1px solid var(--border-color);
+    transition: border var(--transition), box-shadow var(--transition);
+    font-size: 0.95rem;
 }
 
     .form-control:focus {
-        border-color: #4facfe;
+        border-color: var(--primary-color);
         box-shadow: 0 0 0 0.15rem rgba(79, 172, 254, 0.3);
     }
 
@@ -79,22 +98,31 @@ body {
 .form-check {
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    margin: 12px 0;
     font-size: 0.9rem;
 }
 
     .form-check input {
-        margin-right: 6px;
+        margin-right: 8px;
+        accent-color: var(--primary-color);
     }
 
 /* ===== Buttons ===== */
-.btn-success {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+.btn {
+    display: inline-block;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius);
     font-weight: 600;
     letter-spacing: 0.5px;
+    cursor: pointer;
+    padding: 12px;
+    width: 100%;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #fff;
 }
 
     .btn-success:hover {
@@ -104,9 +132,9 @@ body {
 
 /* ===== Links ===== */
 a {
-    color: #4facfe;
+    color: var(--primary-color);
     font-weight: 500;
-    transition: color 0.2s;
+    transition: color var(--transition);
 }
 
     a:hover {
@@ -140,6 +168,6 @@ a {
     }
 
         .account-box h2 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
 }

@@ -46,6 +46,46 @@ namespace LilySoft_INVMS.Controllers
             ModelState.AddModelError(string.Empty, "Invalid login attempt");
             return View(models);
         }
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegistrationViewModels model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = new Users
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FullName = model.Name
+            };
+
+            var result = await userManager.CreateAsync(user, model.Password);
+            if(result.Succeeded)
+            {
+                var roleExists = await roleManager.RoleExistsAsync("Viewer");
+                if (!roleExists)
+                {
+                    await roleManager.CreateAsync(new IdentityRole("Viewer"));
+                }
+                await userManager.AddToRoleAsync(user, "Viewer");
+                await signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Login", "Account");
+ 
+            }
+
+            foreach(var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
+        }
     }
 }
