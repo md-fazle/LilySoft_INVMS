@@ -9,7 +9,9 @@
   <ItemGroup>
     <Folder Include="Auth\Models\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Models\Invms\" />
     <Folder Include="Services\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
   <ItemGroup>

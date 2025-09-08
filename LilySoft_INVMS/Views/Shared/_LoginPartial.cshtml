@@ -3,12 +3,21 @@
 @inject SignInManager<Users> SignInManager
 @inject UserManager<Users> UserManager
 
-<ul class="navbar-nav ms-auto align-items-center">
+<ul class="navbar-nav ms-auto align-items-center" style="list-style:none; padding:0; margin:0;">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
-                <button type="submit" class="btn btn-link nav-link text-dark p-0" style="cursor:pointer;">
+        <li class="nav-item" style="margin:10px 0; text-align:center;">
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                <button type="submit"
+                        style="background:linear-gradient(135deg, #ff416c, #ff4b2b);
+                               color:white;
+                               border:none;
+                               padding:8px 18px;
+                               border-radius:25px;
+                               font-weight:600;
+                               font-size:14px;
+                               cursor:pointer;
+                               transition:0.3s ease;">
                     Logout
                 </button>
             </form>
@@ -16,11 +25,31 @@
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+        <li class="nav-item" style="margin:8px 0; text-align:center;">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login"
+               style="display:inline-block;
+                      padding:8px 16px;
+                      border-radius:20px;
+                      text-decoration:none;
+                      background:linear-gradient(135deg, #36d1dc, #5b86e5);
+                      color:white;
+                      font-weight:600;
+                      transition:0.3s ease;">
+                Login
+            </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+        <li class="nav-item" style="margin:8px 0; text-align:center;">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register"
+               style="display:inline-block;
+                      padding:8px 16px;
+                      border-radius:20px;
+                      text-decoration:none;
+                      background:linear-gradient(135deg, #11998e, #38ef7d);
+                      color:white;
+                      font-weight:600;
+                      transition:0.3s ease;">
+                Register
+            </a>
         </li>
     }
 </ul>
