@@ -1,0 +1,185 @@
+/* ===========================
+   Global Styles
+=========================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 15px;
+}
+
+/* ===========================
+   Hero Carousel
+=========================== */
+#inventoryCarousel {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+    #inventoryCarousel .carousel-item {
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    #inventoryCarousel h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    #inventoryCarousel p {
+        font-size: 1.2rem;
+    }
+
+/* Carousel Controls */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1);
+}
+
+/* ===========================
+   Features Section
+=========================== */
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.card {
+    border-radius: 15px;
+    transition: all 0.3s ease-in-out;
+    background: #fff;
+}
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+.card-body h5 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+.card-body p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* ===========================
+   Call to Action Section
+=========================== */
+.cta-section {
+    background: linear-gradient(135deg, #36d1dc, #5b86e5);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 20px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+    .cta-section h2 {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .cta-section p {
+        font-size: 1.2rem;
+        margin: 15px 0;
+    }
+
+    .cta-section .btn {
+        border-radius: 30px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .cta-section .btn:hover {
+            background: #fff;
+            color: #007bff;
+            transform: scale(1.05);
+        }
+
+/* ===========================
+   Responsive Design
+=========================== */
+
+/* Tablets */
+@media (max-width: 992px) {
+    #inventoryCarousel h1 {
+        font-size: 2rem;
+    }
+
+    #inventoryCarousel p {
+        font-size: 1rem;
+    }
+
+    .card-body h5 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+    #inventoryCarousel {
+        border-radius: 10px;
+    }
+
+        #inventoryCarousel h1 {
+            font-size: 1.6rem;
+        }
+
+        #inventoryCarousel p {
+            font-size: 0.95rem;
+        }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .cta-section {
+        padding: 40px 15px;
+    }
+
+        .cta-section h2 {
+            font-size: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1rem;
+        }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    #inventoryCarousel h1 {
+        font-size: 1.4rem;
+    }
+
+    #inventoryCarousel p {
+        font-size: 0.9rem;
+    }
+
+    .cta-section h2 {
+        font-size: 1.3rem;
+    }
+
+    .cta-section p {
+        font-size: 0.9rem;
+    }
+}

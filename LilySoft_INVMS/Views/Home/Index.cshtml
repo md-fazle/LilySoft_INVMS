@@ -2,7 +2,66 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Section with Slider -->
+<div class="container mt-4">
+    <div id="inventoryCarousel" class="carousel slide mb-5 shadow-lg" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active text-center" style="background: linear-gradient(135deg, #36d1dc, #5b86e5);">
+                <h1 class="display-4 fw-bold">Welcome to LilySoft Inventory</h1>
+                <p class="lead">Smart, simple, and powerful inventory management system for modern businesses.</p>
+            </div>
+            <div class="carousel-item text-center" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+                <h1 class="display-4 fw-bold">Real-Time Tracking</h1>
+                <p class="lead">Monitor your stock, sales, and suppliers instantly with real-time insights.</p>
+            </div>
+            <div class="carousel-item text-center" style="background: linear-gradient(135deg, #ff416c, #ff4b2b);">
+                <h1 class="display-4 fw-bold">Grow Your Business</h1>
+                <p class="lead">Scale with ease using automation and detailed reports tailored for you.</p>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#inventoryCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#inventoryCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <!-- Features Section -->
+    <h2 class="text-center fw-bold mb-4">Why Choose LilySoft Inventory?</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">📦 Easy Stock Management</h5>
+                    <p class="card-text">Manage products, categories, and suppliers with just a few clicks. Stay organized effortlessly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">📊 Smart Analytics</h5>
+                    <p class="card-text">View insightful reports on sales, stock levels, and revenue to make data-driven decisions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">⚡ Real-Time Alerts</h5>
+                    <p class="card-text">Get instant notifications for low stock, sales updates, and supplier activities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section mt-5">
+        <h2 class="fw-bold">Boost Your Business with LilySoft Inventory</h2>
+        <p class="lead">Streamline operations, reduce costs, and improve efficiency with our smart inventory system.</p>
+        <a href="#" class="btn btn-light btn-lg mt-3">Get Started</a>
+    </div>
 </div>
