@@ -4,20 +4,26 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using LilySoft_INVMS.Auth.Models;
 using LilySoft_INVMS.Auth.Services;
-using LilySoft_INVMS.Data; // Ensure this is included for AuthDbContext
+using LilySoft_INVMS.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllersWithViews();
 
-// DbContext configuration
+// Connection string (you can use one or separate DBs)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("DefaultConnection not found.");
+
+// ===== Auth DbContext =====
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Identity configuration
+// ===== Inventory / ERP DbContext =====
+builder.Services.AddDbContext<InvmsDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// Configure Identity
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -31,25 +37,26 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.AllowedUserNameCharacters =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<AuthDbContext>()
 .AddDefaultTokenProviders();
 
-// Authorization policies (if any needed)
+// Optional: Authorization policies
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Seed roles/users AFTER app is built and services are available
+// Seed roles/users after building app
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await SeedService.SeedDatabase(services);
 }
 
-// Middleware
+// Configure middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -64,7 +71,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Default route
+// Default route to Login page
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
