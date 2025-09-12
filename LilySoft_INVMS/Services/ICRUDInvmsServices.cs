@@ -1,6 +1,9 @@
-﻿namespace LilySoft_INVMS.Services
+﻿using LilySoft_INVMS.Models.Invms;
+
+namespace LilySoft_INVMS.Services
 {
-    public class ICRUDInvmsServices
+    public interface ICRUDInvmsServices
     {
+        Task<IEnumerable<Product>> GetAllProducts()
     }
 }

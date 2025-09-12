@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LilySoft_INVMS.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LilySoft_INVMS.Controllers
 {
     public class InvmsController : Controller
     {
-        public IActionResult Index()
+        private readonly ICRUDInvmsServices _crudInvmsServices;
+        public InvmsController(ICRUDInvmsServices crudInvmsServices)
         {
-            return View();
+            _crudInvmsServices = crudInvmsServices;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Products()
+        {
+            var products = _crudInvmsServices.GetAllProducts();
+            return View(products);
         }
     }
 }
