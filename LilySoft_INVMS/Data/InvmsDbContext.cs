@@ -6,7 +6,7 @@ namespace LilySoft_INVMS.Data
     public class InvmsDbContext : DbContext
     {
         public InvmsDbContext(DbContextOptions<InvmsDbContext> options)
-            : base(options){ }
+            : base(options) { }
 
         // DbSets for all your models
         public DbSet<Category> Categories { get; set; }
@@ -28,11 +28,11 @@ namespace LilySoft_INVMS.Data
         public DbSet<SupplierReturn> SupplierReturns { get; set; }
         public DbSet<SupplierReturnDetail> SupplierReturnDetails { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // ======= Relationships =======
 
             // Category -> Product
             modelBuilder.Entity<Product>()
@@ -155,6 +155,36 @@ namespace LilySoft_INVMS.Data
                 .WithMany(po => po.SupplierReturns)
                 .HasForeignKey(sr => sr.purchase_order_id)
                 .HasPrincipalKey(po => po.purchase_order_id);
+
+            // ======= Decimal Precision =======
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.product_price).HasPrecision(18, 2);
+
+            modelBuilder.Entity<PRDetail>()
+                .Property(p => p.unit_price).HasPrecision(18, 2);
+            modelBuilder.Entity<PRDetail>()
+                .Property(p => p.total_price).HasPrecision(18, 2);
+
+            modelBuilder.Entity<PODetail>()
+                .Property(p => p.unit_price).HasPrecision(18, 2);
+            modelBuilder.Entity<PODetail>()
+                .Property(p => p.total_price).HasPrecision(18, 2);
+
+            modelBuilder.Entity<OrderDetail>()
+                .Property(p => p.unit_price).HasPrecision(18, 2);
+            modelBuilder.Entity<OrderDetail>()
+                .Property(p => p.total_price).HasPrecision(18, 2);
+
+            modelBuilder.Entity<CustomerReturnDetail>()
+                .Property(p => p.unit_price).HasPrecision(18, 2);
+            modelBuilder.Entity<CustomerReturnDetail>()
+                .Property(p => p.total_price).HasPrecision(18, 2);
+
+            modelBuilder.Entity<SupplierReturnDetail>()
+                .Property(p => p.unit_price).HasPrecision(18, 2);
+            modelBuilder.Entity<SupplierReturnDetail>()
+                .Property(p => p.total_price).HasPrecision(18, 2);
         }
     }
 }
