@@ -1,0 +1,127 @@
+/* ---------- Table Container ---------- */
+.table-container {
+    margin: 30px auto;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+    /* ---------- Title Styling ---------- */
+    .table-container h2 {
+        margin-bottom: 20px;
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+/* ---------- Search Box ---------- */
+#tableSearch {
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    width: 250px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    font-size: 0.95rem;
+}
+
+/* ---------- Table Styling ---------- */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+    thead th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+tbody tr {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    tbody tr:hover {
+        background-color: #e7f1ff;
+    }
+
+tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* ---------- Striped Rows ---------- */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* ---------- Buttons Styling ---------- */
+.btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+    }
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+    border: none;
+}
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+    .btn-danger:hover {
+        background-color: #bb2d3b;
+    }
+
+/* ---------- Pagination Styling ---------- */
+#tablePagination button {
+    border: 1px solid #0d6efd;
+    border-radius: 5px;
+    background: #fff;
+    color: #0d6efd;
+    padding: 5px 10px;
+    margin: 2px;
+    transition: 0.2s;
+}
+
+    #tablePagination button:hover {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+
+    #tablePagination button.active {
+        background-color: #0d6efd;
+        color: #fff;
+    }

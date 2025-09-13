@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using LilySoft_INVMS.Auth.Models;
 using LilySoft_INVMS.Auth.Services;
 using LilySoft_INVMS.Data;
+using LilySoft_INVMS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,8 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 // ===== Inventory / ERP DbContext =====
 builder.Services.AddDbContext<InvmsDbContext>(options =>
     options.UseSqlServer(connectionString));
-
+// ===== Application Services =====
+builder.Services.AddScoped<ICategoryService, CategoryService>(); // ✅ Added
 // Configure Identity
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
 {

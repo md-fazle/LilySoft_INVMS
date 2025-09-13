@@ -1,0 +1,19 @@
+﻿@model LilySoft_INVMS.Models.Invms.Category
+
+<div class="container mt-4">
+    <h2>Delete Category</h2>
+    <h5>Are you sure you want to delete this?</h5>
+    <dl class="row">
+        <dt class="col-sm-3">Category ID</dt>
+        <dd class="col-sm-9">@Model.catagory_id</dd>
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.catagory_name</dd>
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.catagory_description</dd>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

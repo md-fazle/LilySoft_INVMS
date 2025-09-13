@@ -1,0 +1,22 @@
+﻿@model LilySoft_INVMS.Models.Invms.Category
+
+<div class="container mt-4">
+    <h2>Edit Category</h2>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="id" />
+        <div class="mb-3">
+            <label asp-for="catagory_id" class="form-label"></label>
+            <input asp-for="catagory_id" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="catagory_name" class="form-label"></label>
+            <input asp-for="catagory_name" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="catagory_description" class="form-label"></label>
+            <textarea asp-for="catagory_description" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
