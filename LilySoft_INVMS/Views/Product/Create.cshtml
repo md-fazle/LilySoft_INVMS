@@ -1,0 +1,66 @@
+﻿@model LilySoft_INVMS.Models.Invms.Product
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">➕ Add New Product</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" enctype="multipart/form-data" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="product_id" class="form-label"></label>
+                        <input asp-for="product_id" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="product_code" class="form-label"></label>
+                        <input asp-for="product_code" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="product_name" class="form-label"></label>
+                    <input asp-for="product_name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="product_description" class="form-label"></label>
+                    <textarea asp-for="product_description" class="form-control"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="product_price" class="form-label"></label>
+                        <input asp-for="product_price" class="form-control" type="number" step="0.01" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category</label>
+                        <select asp-for="catagory_id" class="form-control"
+                                asp-items="@(new SelectList(ViewBag.Categories, "catagory_id", "catagory_name"))">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Product Image</label>
+                    <input type="file" name="ImageFile" class="form-control" />
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

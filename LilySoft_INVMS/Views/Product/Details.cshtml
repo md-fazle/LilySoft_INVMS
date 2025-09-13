@@ -1,0 +1,42 @@
+﻿@model IEnumerable<LilySoft_INVMS.Models.Invms.Product>
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">All Products</h2>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center align-middle">
+                    <td>@item.product_id</td>
+                    <td>@item.product_name</td>
+                    <td>@item.product_price?.ToString("C")</td>
+                    <td>@item.Category?.catagory_name</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.product_image))
+                        {
+                            <img src="@item.product_image" alt="Product Image" width="60" height="60" class="img-thumbnail" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Image</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

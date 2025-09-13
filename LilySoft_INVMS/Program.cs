@@ -25,6 +25,8 @@ builder.Services.AddDbContext<InvmsDbContext>(options =>
     options.UseSqlServer(connectionString));
 // ===== Application Services =====
 builder.Services.AddScoped<ICategoryService, CategoryService>(); // ✅ Added
+builder.Services.AddScoped<IProductService, ProductService>(); // ✅ Added
+
 // Configure Identity
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
 {
