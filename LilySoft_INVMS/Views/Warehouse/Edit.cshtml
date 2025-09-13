@@ -1,0 +1,31 @@
+﻿@model LilySoft_INVMS.Models.Invms.Warehouse
+@{
+    ViewData["Title"] = "Edit Warehouse";
+}
+
+<div class="container mt-4">
+    <h2>✏️ Edit Warehouse</h2>
+    <div class="card shadow-sm p-4 mt-3" style="max-width:600px;">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="id" />
+
+            <div class="mb-3">
+                <label asp-for="warehouse_id" class="form-label">Warehouse ID</label>
+                <input asp-for="warehouse_id" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="warehouse_name" class="form-label">Warehouse Name</label>
+                <input asp-for="warehouse_name" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="warehouse_location" class="form-label">Location</label>
+                <input asp-for="warehouse_location" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Update</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

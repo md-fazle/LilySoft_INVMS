@@ -26,6 +26,7 @@ builder.Services.AddDbContext<InvmsDbContext>(options =>
 // ===== Application Services =====
 builder.Services.AddScoped<ICategoryService, CategoryService>(); // ✅ Added
 builder.Services.AddScoped<IProductService, ProductService>(); // ✅ Added
+builder.Services.AddScoped<IWarehouseService, WarehouseService>(); // ✅ Added
 
 // Configure Identity
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
