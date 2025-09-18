@@ -1,0 +1,78 @@
+﻿@model LilySoft_INVMS.Models.Invms.SupplierViewModel
+
+<h2>Create Supplier</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="SupplierId" class="form-label"></label>
+        <input asp-for="SupplierId" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="SupplierName" class="form-label"></label>
+        <input asp-for="SupplierName" class="form-control" />
+    </div>
+
+    <h4>Contacts</h4>
+    <div id="contacts">
+        @for (int i = 0; i < Model.Contacts.Count; i++)
+        {
+            <div class="contact-item border p-2 mb-2">
+                <div class="mb-2">
+                    <label asp-for="Contacts[@i].supplier_contact_id" class="form-label"></label>
+                    <input asp-for="Contacts[@i].supplier_contact_id" class="form-control" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="Contacts[@i].contact_name" class="form-label"></label>
+                    <input asp-for="Contacts[@i].contact_name" class="form-control" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="Contacts[@i].contact_email" class="form-label"></label>
+                    <input asp-for="Contacts[@i].contact_email" class="form-control" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="Contacts[@i].contact_phone" class="form-label"></label>
+                    <input asp-for="Contacts[@i].contact_phone" class="form-control" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="Contacts[@i].contact_address" class="form-label"></label>
+                    <input asp-for="Contacts[@i].contact_address" class="form-control" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+<button type="button" class="btn btn-info mt-2" onclick="addContact()">Add Another Contact</button>
+
+@section Scripts {
+    <script>
+        function addContact() {
+            var index = document.querySelectorAll(".contact-item").length;
+            var container = document.getElementById("contacts");
+            container.insertAdjacentHTML("beforeend", `
+                <div class="contact-item border p-2 mb-2">
+                    <input type="hidden" name="Contacts[${index}].supplier_contact_id" value="" />
+                    <div class="mb-2">
+                        <label>Contact Name</label>
+                        <input name="Contacts[${index}].contact_name" class="form-control" />
+                    </div>
+                    <div class="mb-2">
+                        <label>Contact Email</label>
+                        <input name="Contacts[${index}].contact_email" class="form-control" />
+                    </div>
+                    <div class="mb-2">
+                        <label>Contact Phone</label>
+                        <input name="Contacts[${index}].contact_phone" class="form-control" />
+                    </div>
+                    <div class="mb-2">
+                        <label>Contact Address</label>
+                        <input name="Contacts[${index}].contact_address" class="form-control" />
+                    </div>
+                </div>
+            `);
+        }
+    </script>
+}

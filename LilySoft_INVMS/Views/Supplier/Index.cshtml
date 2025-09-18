@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LilySoft_INVMS.Models.Invms.Supplier>
+
+@{
+    ViewData["Title"] = "Suppliers";
+}
+
+<h2>Suppliers</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Add Supplier</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Supplier ID</th>
+            <th>Supplier Name</th>
+            <th>Contacts</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var supplier in Model)
+        {
+            <tr>
+                <td>@supplier.supplier_id</td>
+                <td>@supplier.supplier_name</td>
+                <td>
+                    @if (supplier.SupplierContacts != null && supplier.SupplierContacts.Any())
+                    {
+                        foreach (var contact in supplier.SupplierContacts)
+                        {
+                            <div>
+                                <strong>@contact.contact_name</strong><br />
+                                Email: @contact.contact_email<br />
+                                Phone: @contact.contact_phone<br />
+                                Address: @contact.contact_address
+                            </div>
+                            <hr />
+                        }
+                    }
+                    else
+                    {
+                        <div>No contacts available</div>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@supplier.id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@supplier.id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

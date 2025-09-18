@@ -1,0 +1,45 @@
+﻿@model LilySoft_INVMS.Models.Invms.SupplierViewModel
+
+<h2>Edit Supplier</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="SupplierId"></label>
+        <input asp-for="SupplierId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SupplierName"></label>
+        <input asp-for="SupplierName" class="form-control" />
+    </div>
+
+    <h4>Contacts</h4>
+    <div id="contacts">
+        @for (int i = 0; i < Model.Contacts.Count; i++)
+        {
+            <div class="contact-row border p-2 mb-2">
+                <input type="hidden" asp-for="Contacts[@i].id" />
+                <div class="form-group">
+                    <label>Name</label>
+                    <input asp-for="Contacts[@i].contact_name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input asp-for="Contacts[@i].contact_email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input asp-for="Contacts[@i].contact_phone" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input asp-for="Contacts[@i].contact_address" class="form-control" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+</form>

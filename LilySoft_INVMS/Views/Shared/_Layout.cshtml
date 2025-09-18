@@ -61,6 +61,11 @@
                             <i class="bi bi-list-ul"></i> Warehouse
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" asp-controller="Supplier" asp-action="Index">
+                            <i class="bi bi-list-ul"></i> Suppliers
+                        </a>
+                    </li>
 
                     <!-- You can add more setup options here later -->
                 </ul>
@@ -78,7 +83,7 @@
             @RenderBody()
         </main>
 
-        <footer class="footer text-muted">
+        <footer class="footer text-muted" style="line-height: 10px;">
             <div class="container">
                 &copy; 2025 - LilySoft_INVMS -
                 <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
