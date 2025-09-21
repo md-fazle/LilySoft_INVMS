@@ -73,5 +73,12 @@ namespace LilySoft_INVMS.Controllers
             await _stockService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: /Stock/
+        public async Task<IActionResult> ProductList()
+        {
+            var stockProducts = await _stockService.GetStockProductsAsync();
+            return View(stockProducts);
+        }
     }
 }

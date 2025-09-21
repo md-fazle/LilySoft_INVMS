@@ -1,0 +1,42 @@
+﻿@model IEnumerable<LilySoft_INVMS.Models.Invms.ProductsViewModel>
+
+<h2>Stock List</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product Code</th>
+            <th>Product Name</th>
+            <th>Description</th>
+            <th>Warehouse</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.product_image))
+                    {
+                        <img src="@Url.Content(item.product_image)" alt="Product" width="60" height="60" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>@item.product_code</td>
+                <td>@item.product_name</td>
+                <td>@item.product_description</td>
+                <td>@item.warehouse_name (@item.warehouse_location)</td>
+                <td>@item.product_price?.ToString("C")</td>
+                <td>@item.quantity</td>
+                <td>@item.totalPrice.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>

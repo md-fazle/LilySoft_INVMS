@@ -51,5 +51,29 @@ namespace LilySoft_INVMS.Services
             }
         }
 
+
+        public async Task<List<ProductsViewModel>> GetStockProductsAsync()
+        {
+            var result = await (from stock in _context.Stocks
+                                join product in _context.Products on stock.product_id equals product.product_id
+                                join warehouse in _context.Warehouses on stock.warehouse_id equals warehouse.warehouse_id
+                                select new ProductsViewModel
+                                {
+                                    stock_id = stock.stock_id,
+                                    product_id = product.product_id,
+                                    product_image = product.product_image,
+                                    product_code = product.product_code,
+                                    product_name = product.product_name,
+                                    product_description = product.product_description,
+                                    product_price = product.product_price,
+                                    quantity = stock.quantity,
+                                    warehouse_name = warehouse.warehouse_name,
+                                    warehouse_location = warehouse.warehouse_location,
+                                    totalPrice = (product.product_price ?? 0) * stock.quantity
+                                }).ToListAsync();
+
+            return result;
+        }
+
     }
 }

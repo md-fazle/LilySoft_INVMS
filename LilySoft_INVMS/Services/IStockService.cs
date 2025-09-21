@@ -9,5 +9,6 @@ namespace LilySoft_INVMS.Services
         Task AddAsync(Stock stock);
         Task UpdateAsync(Stock stock);
         Task DeleteAsync(int id);
+        Task<List<ProductsViewModel>> GetStockProductsAsync();
     }
 }
