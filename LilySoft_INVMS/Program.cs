@@ -29,6 +29,7 @@ builder.Services.AddScoped<IProductService, ProductService>(); // ✅ Added
 builder.Services.AddScoped<IWarehouseService, WarehouseService>(); // ✅ Added
 builder.Services.AddScoped<ISupplierService, SupplierService>(); // ✅ Added
 builder.Services.AddScoped<ICustomerService, CustomerService>(); // ✅ Added
+builder.Services.AddScoped<IStockService, StockService>(); // ✅ Added
 
 // Configure Identity
 builder.Services.AddIdentity<Users, IdentityRole>(options =>

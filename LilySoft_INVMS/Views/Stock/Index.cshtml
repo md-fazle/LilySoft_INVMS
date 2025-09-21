@@ -1,0 +1,33 @@
+﻿@model IEnumerable<LilySoft_INVMS.Models.Invms.Stock>
+
+<h2>Stock</h2>
+<a asp-action="Create" class="btn btn-primary">Add Stock</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Stock ID</th>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th>Quantity</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.stock_id</td>
+                <td>@s.Product?.product_name</td>
+                <td>@s.Warehouse?.warehouse_name</td>
+                <td>@s.quantity</td>
+                <td>@s.last_updated.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@s.id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@s.id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,32 @@
+﻿@model LilySoft_INVMS.Models.Invms.Stock
+
+<h2>Add Stock</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Stock ID</label>
+        <input asp-for="stock_id" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Product</label>
+        <select asp-for="product_id" class="form-control" asp-items="@(new SelectList(ViewBag.Products, "product_id", "product_name"))">
+            <option value="">-- Select Product --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Warehouse</label>
+        <select asp-for="warehouse_id" class="form-control" asp-items="@(new SelectList(ViewBag.Warehouses, "warehouse_id", "warehouse_name"))">
+            <option value="">-- Select Warehouse --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Quantity</label>
+        <input asp-for="quantity" type="number" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
