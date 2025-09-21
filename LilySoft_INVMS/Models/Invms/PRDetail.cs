@@ -10,7 +10,8 @@
         public decimal unit_price { get; set; }
         public decimal total_price { get; set; }
 
-        public PurchaseRequest? PurchaseRequest { get; set; }
-        public Product? Product { get; set; }
+        // ✅ Must not be nullable
+        public PurchaseRequest PurchaseRequest { get; set; } = default!;
+        public Product Product { get; set; } = default!;
     }
 }

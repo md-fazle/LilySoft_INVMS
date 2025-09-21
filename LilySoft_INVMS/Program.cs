@@ -30,6 +30,7 @@ builder.Services.AddScoped<IWarehouseService, WarehouseService>(); // ✅ Added
 builder.Services.AddScoped<ISupplierService, SupplierService>(); // ✅ Added
 builder.Services.AddScoped<ICustomerService, CustomerService>(); // ✅ Added
 builder.Services.AddScoped<IStockService, StockService>(); // ✅ Added
+builder.Services.AddScoped<IPurchaseRequestService, PurchaseRequestService>(); // ✅ Added
 
 // Configure Identity
 builder.Services.AddIdentity<Users, IdentityRole>(options =>

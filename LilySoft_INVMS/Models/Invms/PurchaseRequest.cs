@@ -6,6 +6,7 @@
         public string? purchase_request_id { get; set; }
         public DateTime RequestDate { get; set; }
 
-        public ICollection<PRDetail>? PRDetails { get; set; }
+        // ✅ Must not be nullable
+        public ICollection<PRDetail> PRDetails { get; set; } = new List<PRDetail>();
     }
 }

@@ -1,0 +1,63 @@
+﻿@model LilySoft_INVMS.Models.Invms.PurchaseRequest
+
+@{
+    ViewData["Title"] = "Purchase Request Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Purchase Request Details</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Basic Information</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">PR ID:</dt>
+            <dd class="col-sm-9">@Model.purchase_request_id</dd>
+
+            <dt class="col-sm-3">Request Date:</dt>
+            <dd class="col-sm-9">@Model.RequestDate.ToString("yyyy-MM-dd")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>Items</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detail in Model.PRDetails)
+                {
+                    <tr>
+                        <td>@(detail.Product?.product_name ?? detail.product_id)</td>
+                        <td>@detail.quantity</td>
+                        <td>@detail.unit_price.ToString("C")</td>
+                        <td>@detail.total_price.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="table-primary">
+                    <th colspan="3" class="text-end">Grand Total:</th>
+                    <th>@Model.PRDetails.Sum(d => d.total_price).ToString("C")</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
